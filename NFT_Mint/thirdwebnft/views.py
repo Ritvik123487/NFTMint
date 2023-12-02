@@ -5,13 +5,9 @@ from thirdweb.types.nft import NFTMetadataInput
 from django.core.files.storage import FileSystemStorage
 from io import BytesIO
 import json
-
-# Additional imports
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db import transaction
-
-# Create your views here.
 
 def home(request):
     if request.method == 'POST' and request.FILES.get('home'):
