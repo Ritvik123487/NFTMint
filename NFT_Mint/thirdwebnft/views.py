@@ -77,3 +77,43 @@ def create_user(request):
 
 def custom_404_view(request, exception):
     return render(request, '404.html', {})
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        # Process the form data
+        request.user.email = request.POST.get('email', request.user.email)
+        # Add other fields you want to update
+        request.user.save()
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('user_profile')
+    
+    return render(request, 'edit_profile.html')
+
+@login_required
+def upload_file(request):
+    if request.method == 'POST' and request.FILES.get('file'):
+        file = request.FILES['file']
+        fs = FileSystemStorage()
+        filename = fs.save(file.name, file)
+        uploaded_file_url = fs.url(filename)
+        return render(request, 'upload_file.html', {'uploaded_file_url': uploaded_file_url})
+    
+    return render(request, 'upload_file.html')
+
+def list_nfts(request):
+    nfts = nftall.nft_collection.get_all()
+    return render(request, 'list_nfts.html', {'nfts': nfts})
+def contact(request):
+    if request.method == 'POST':
+        # Process the contact form data
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        # Here you would typically send an email or store the message
+        messages.success(request, 'Thank you for your message!')
+        return redirect('home')
+
+    return render(request, 'contact.html')
+
+
